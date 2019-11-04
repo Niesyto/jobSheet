@@ -31,7 +31,7 @@ export default function MenuDrawer(props){
 
     function handleClick(index)
     {
-      props.setSelectedOption(menuList[index]);
+      props.setSelectedOption(index);
     }
 
     return(
