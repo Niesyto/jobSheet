@@ -6,9 +6,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import projects from './Projects.js'
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
+import AddIcon from '@material-ui/icons/Add';
 
 
 const useStyles = makeStyles(theme => ({
@@ -26,7 +26,27 @@ const useStyles = makeStyles(theme => ({
 
 export default function ProjectsView(props){
     const classes = useStyles();
+    
 
+   
+    const projects=JSON.parse(localStorage.getItem("projects"));
+    console.log(projects);
+
+    function handleClick(id){
+        props.setSelectedOption(3);
+        props.setSelectedProject(id)
+   }
+
+   if(projects===null)
+   return( 
+    <Paper className={classes.root}>
+         <Fab color="primary" aria-label="add project"  variant="extended" className={classes.fab} onClick={handleClick.bind(this,null)}>
+            <AddIcon />
+            Add project
+        </Fab>
+    </Paper>
+    )
+    else
     return(
         <Paper className={classes.root}>
             <Table className={classes.table} aria-label="simple table">
@@ -47,7 +67,7 @@ export default function ProjectsView(props){
                         <TableCell align="right">{project.name}</TableCell>
                         <TableCell align="right">{project.description}</TableCell>
                         <TableCell align="right">
-                            <Fab color="primary" aria-label="edit" className={classes.fab}>
+                            <Fab color="primary" aria-label="edit" className={classes.fab} onClick={handleClick.bind(this,project.id)}>
                                 <EditIcon />
                             </Fab>
                         </TableCell>
@@ -55,6 +75,10 @@ export default function ProjectsView(props){
                 ))}
             </TableBody>
         </Table>
+        <Fab color="primary" aria-label="add project"  variant="extended" className={classes.fab} onClick={handleClick.bind(this,null)}>
+            <AddIcon />
+            Add project
+        </Fab>
       </Paper>
     )
 }

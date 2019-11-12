@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import EmployeesView from './EmployeesView';
 import EmployeeDetails from './EmployeeDetails';
 import ProjectsView from './ProjectsView';
+import ProjectDetails from './ProjectDetails';
 
 const drawerWidth = 240;
 
@@ -13,6 +14,12 @@ const useStyles = makeStyles(theme => ({
     marginLeft: drawerWidth,
     marginTop: '64px',
     display: "flex"
+  },
+  contentDetails: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    marginLeft: drawerWidth,
+    marginTop: '64px'
   }
 }));
 
@@ -20,26 +27,34 @@ const useStyles = makeStyles(theme => ({
 
 export default function SelectedView(props){
     const classes = useStyles();
-    const [selectedEmployee, setSelectedEmployee] = React.useState("");
+    const [selectedDetail, setSelectedDetail] = React.useState("");
 
+
+    
 
 
     if(props.selectedOption===0)
     return(
         <main className={classes.content}>       
-           <EmployeesView setSelectedEmployee={setSelectedEmployee} setSelectedOption={props.setSelectedOption}/>  
+           <EmployeesView setSelectedEmployee={setSelectedDetail} setSelectedOption={props.setSelectedOption}/>  
         </main>
     )
     else if(props.selectedOption===1)
     return(
         <main className={classes.content}>       
-           <ProjectsView/>
+           <ProjectsView setSelectedProject={setSelectedDetail} setSelectedOption={props.setSelectedOption}/>
         </main>
     )
     else if(props.selectedOption===2)
     return(
-        <main className={classes.content}>       
-           <EmployeeDetails selectedEmployee={selectedEmployee}/>
+        <main className={classes.contentDetails}>       
+           <EmployeeDetails selectedEmployee={selectedDetail}/>
+        </main>
+    )
+    else if(props.selectedOption===3)
+    return(
+        <main className={classes.contentDetails}>       
+           <ProjectDetails selectedProject={selectedDetail}/>
         </main>
     )
     else

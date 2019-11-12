@@ -9,7 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import employees from './Employee.js'
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
-
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -33,6 +33,7 @@ export default function EmployeesView(props){
 }
 
     return(
+        <>
         <Paper className={classes.root}>
             <Table className={classes.table} aria-label="simple table">
                 <TableHead>
@@ -63,5 +64,9 @@ export default function EmployeesView(props){
             </TableBody>
         </Table>
       </Paper>
+       <Fab color="primary" aria-label="add user" className={classes.fab}>
+       <AddIcon />
+       </Fab>
+       </>
     )
 }

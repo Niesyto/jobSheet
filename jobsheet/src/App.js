@@ -5,7 +5,7 @@ import SelectedView from './SelectedView.js'
 
 function App() {
   const [selectedOption, setSelectedOption] = React.useState("");
-  const possibleOptions = ["Employees", "Projects"];
+  const possibleOptions = ["Employees", "Projects","Employee Details","Project Details"];
 
   return (
     <>
