@@ -30,7 +30,6 @@ export default function ProjectsView(props){
 
    
     const projects=JSON.parse(localStorage.getItem("projects"));
-    console.log(projects);
 
     function handleClick(id){
         props.setSelectedOption(3);

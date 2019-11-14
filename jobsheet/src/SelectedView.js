@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import EmployeesView from './EmployeesView';
 import EmployeeDetails from './EmployeeDetails';
@@ -54,7 +54,7 @@ export default function SelectedView(props){
     else if(props.selectedOption===3)
     return(
         <main className={classes.contentDetails}>       
-           <ProjectDetails selectedProject={selectedDetail}/>
+           <ProjectDetails selectedProject={selectedDetail} setSelectedProject={setSelectedDetail} setSelectedOption={props.setSelectedOption}/>
         </main>
     )
     else
