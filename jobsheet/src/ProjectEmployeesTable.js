@@ -8,6 +8,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
 
 export default function ProjectEmployeesTable(props)
 {
@@ -15,11 +21,23 @@ export default function ProjectEmployeesTable(props)
      //Nie wiem czemu, ale bez tego się nie odświeża, więc dodałem. Jakoś nie ogarnia że przy zmianie stanu tablicy też powinien się rerenderować
     const [refresher, setRefresher] = useState(true);      
     const [selectedId, setSelectedId] = useState(0); 
-    var idd=0;
+    const [dialogId, setDialogId] = useState('');
+    const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = (employeeID) => {
+    setSelectedId(employeeID);
+    setOpen(true);
+    setDialogId('');
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedId('');
+  };
    
 
     useEffect( () => {
-        if(props.employees.length!=0){
+        if(props.employees.length!==0){
             setEmployees(props.employees);
             setRefresher(!refresher)
         }
@@ -33,13 +51,17 @@ export default function ProjectEmployeesTable(props)
         props.handleEmployeeChange(tableEmployees);
     }
 
+    const handleDialogIdChange = event => {
+		setDialogId(event.target.value)
+	}
+
     function findEmployee(employee) {
-        return employee.employeeID === idd;
+        return employee.employeeID === selectedId;
     }
 
     const handleDelete= (employeeID) => {
         function removeID(employee) {
-            return employeeID != employee.employeeID;
+            return employeeID !== employee.employeeID;
           }
         var tableEmployees = employees.filter(removeID);
         setEmployees(tableEmployees);
@@ -48,24 +70,23 @@ export default function ProjectEmployeesTable(props)
 
     };
 
-    function handleIdChange(id,event) {
-        idd=id;
-        var tableEmployees = employees;
-        const employeeIndex=employees.findIndex(findEmployee);
-        console.log(idd,id,employeeIndex);
-        tableEmployees[employeeIndex].employeeID=event.target.value;
+    function handleIdChange() {
+        const employeeIndex =employees.findIndex(findEmployee);
+        var tableEmployees=props.employees;
+        tableEmployees[employeeIndex].employeeID=dialogId;
         setEmployees(tableEmployees);
-        props.handleEmployeeChange(tableEmployees);
         setRefresher(!refresher)
+        props.handleEmployeeChange(tableEmployees);
+        setOpen(false);
+        setSelectedId('');
 	}
 
     return(
         <div>
-        <Table style={{width:'25%'}} aria-label="projects table">
+        <Table style={{width:'100%'}} aria-label="projects table">
         <TableHead>
             <TableRow>
                 <TableCell>ID</TableCell>
-                <TableCell align="right">Hours</TableCell>
                 <TableCell align="right">Delete</TableCell>
             </TableRow>
         </TableHead>
@@ -75,8 +96,8 @@ export default function ProjectEmployeesTable(props)
                 <TextField
 					variant='outlined'
 					value={employee.employeeID}
-					onChange={(event) => handleIdChange(employee.employeeID,event)}
-					style={{marginTop:`0px`, float:`right`}}
+					onClick={handleClickOpen.bind(this,employee.employeeID)}
+					style={{marginTop:`25%`, float:`right`}}
 					margin='dense'
 					InputProps={{
 						style:{fontSize:`1rem`},
@@ -92,6 +113,32 @@ export default function ProjectEmployeesTable(props)
         </TableBody>
     </Table>
 
+    <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Edit ID</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Type in the new ID
+          </DialogContentText>
+          <TextField
+            value={dialogId}
+            onChange={handleDialogIdChange}
+            autoFocus
+            margin="dense"
+            id="name"
+            label="id"
+            type="email"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleIdChange} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
 
     <Fab color="primary" aria-label="add employee" variant="extended" onClick={handleAddEmployee}>
         <AddIcon />
