@@ -30,24 +30,20 @@ const useStyles = makeStyles(theme => ({
 	} = props
 
 	const [projects, setProjects] = useState(JSON.parse(localStorage.getItem(`projects`)))
-
 	const [id, setId] = useState('');
 	const [description, setDescription] = useState('');
-    const [name, setName] = useState('');
+	const [name, setName] = useState('');
+	const [employees, setEmployees] = useState([]);
 
     function findProject(project) {
         return project.id === selectedProject;
     }
 
     
-
-    const [employees, setEmployees] = useState([]);
-    
     useEffect( () => {
         if(selectedProject)
         {
             const projectIndex =projects.findIndex(findProject);
-     
             setId(projects[projectIndex].id);
             setDescription(projects[projectIndex].description)
             setName(projects[projectIndex].name)
@@ -89,7 +85,6 @@ const useStyles = makeStyles(theme => ({
 			employees,
         }
 
-     
             var newProjects=projects;
             if(newProjects===null)
                 newProjects=[newProject];
@@ -102,18 +97,15 @@ const useStyles = makeStyles(theme => ({
             else
                 newProjects.push(newProject);
    
-
             localStorage.setItem(`projects`, JSON.stringify(newProjects));
             setSelectedProject(null);
             setProjects(newProjects);
             setSelectedOption(1);
-       
-    
 	}
 
 	return(
 
-		<div style={{width:`25%`}}>
+		<div style={{width:`50%`, minWidth:'335px'}}>
 			<div style={{height:`44px`}}>
 				<Typography variant='h6' edge='start' style={{display:`inline`}}>
 							ID:
@@ -167,7 +159,7 @@ const useStyles = makeStyles(theme => ({
 			<Fab color='primary' aria-label='save project' variant='extended' onClick={handleSave}>
 				<SaveIcon /> Save project
 			</Fab>
-            <Fab color="secondary" aria-label="delete user" variant="extended" onClick={handleDelete}>
+            <Fab color="secondary" aria-label="delete project" variant="extended" onClick={handleDelete}>
                 <DeleteIcon />
                 Delete project
             </Fab>

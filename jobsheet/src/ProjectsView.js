@@ -27,8 +27,6 @@ const useStyles = makeStyles(theme => ({
 export default function ProjectsView(props){
     const classes = useStyles();
     
-
-   
     const projects=JSON.parse(localStorage.getItem("projects"));
 
     function handleClick(id){

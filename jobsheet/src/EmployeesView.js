@@ -6,7 +6,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import employees from './Employee.js'
 import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
@@ -26,14 +25,23 @@ const useStyles = makeStyles(theme => ({
 export default function EmployeesView(props){
     const classes = useStyles();
 
-    
+    const employees=JSON.parse(localStorage.getItem("employees"));
+
   function handleClick(id){
      props.setSelectedOption(2);
      props.setSelectedEmployee(id)
 }
 
+    if(employees===null)
+    return( 
+        <Paper className={classes.root}>
+            <Fab color="primary" aria-label="add employee"  variant="extended" className={classes.fab} onClick={handleClick.bind(this,null)}>
+                <AddIcon />
+                Add employee
+            </Fab>
+        </Paper>
+    )
     return(
-        <>
         <Paper className={classes.root}>
             <Table className={classes.table} aria-label="simple table">
                 <TableHead>
@@ -42,6 +50,7 @@ export default function EmployeesView(props){
                     <TableCell align="right">First Name</TableCell>
                     <TableCell align="right">Last Name</TableCell>
                     <TableCell align="right">Phone Number</TableCell>
+                    <TableCell align="right">Total Hours</TableCell>
                     <TableCell align="right">EDIT/DETAILS</TableCell>
                 </TableRow>
                 </TableHead>
@@ -54,6 +63,7 @@ export default function EmployeesView(props){
                         <TableCell align="right">{employee.firstName}</TableCell>
                         <TableCell align="right">{employee.lastName}</TableCell>
                         <TableCell align="right">{employee.phoneNumber}</TableCell>
+                        <TableCell align="right">{employee.totalHours}</TableCell>
                         <TableCell align="right">
                             <Fab color="primary" aria-label="edit" className={classes.fab} onClick={handleClick.bind(this,employee.id)}>
                                 <EditIcon />
@@ -63,10 +73,11 @@ export default function EmployeesView(props){
                 ))}
             </TableBody>
         </Table>
-      </Paper>
-       <Fab color="primary" aria-label="add user" className={classes.fab}>
-       <AddIcon />
-       </Fab>
-       </>
+        <Fab color="primary" aria-label="add employee"  variant="extended" className={classes.fab} onClick={handleClick.bind(this,null)}>
+            <AddIcon />
+            Add employee
+        </Fab>
+        </Paper>
+       
     )
 }

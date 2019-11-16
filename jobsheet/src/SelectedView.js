@@ -13,13 +13,15 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(3),
     marginLeft: drawerWidth,
     marginTop: '64px',
-    display: "flex"
+    display: "flex",
+    minWidth:"350px"
   },
   contentDetails: {
     flexGrow: 1,
     padding: theme.spacing(3),
     marginLeft: drawerWidth,
-    marginTop: '64px'
+    marginTop: '64px',
+    minWidth:"350px"
   }
 }));
 
@@ -48,7 +50,7 @@ export default function SelectedView(props){
     else if(props.selectedOption===2)
     return(
         <main className={classes.contentDetails}>       
-           <EmployeeDetails selectedEmployee={selectedDetail}/>
+           <EmployeeDetails selectedEmployee={selectedDetail} setSelectedEmployee={setSelectedDetail} setSelectedOption={props.setSelectedOption}/>
         </main>
     )
     else if(props.selectedOption===3)

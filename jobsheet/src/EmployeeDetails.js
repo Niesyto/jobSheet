@@ -1,15 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import employees from './Employee.js'
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
+import SaveIcon from '@material-ui/icons/Save';
+import EmployeeProjectsTable from './EmployeeProjectsTable';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -20,70 +16,118 @@ const useStyles = makeStyles(theme => ({
         minWidth: 650,
       },
   }));
-
-
- 
   
 
-export default function EmployeeDetails(props){
-    const classes = useStyles();
-    
-   
+  const EmployeeDetails = props => {
+    const classes = useStyles();  
+    const {
+        selectedEmployee,
+        setSelectedEmployee,
+        setSelectedOption
+	} = props
 
-   
-    const employeeIndex =employees.findIndex(findEmployee);
-    console.log(employeeIndex);
-     
+    const [employees, setEmployees] = useState(JSON.parse(localStorage.getItem(`employees`)))
+	const [id, setId] = useState('');
+	const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [totalHours, setTotalHours] = useState('');
+    const [projects, setProjects] = useState([]);
 
     function findEmployee(employee) {
-        return employee.id === props.selectedEmployee;
+        return employee.id === selectedEmployee;
       }
 
-  
-
-   
-
-
-    const handleDeleteRow= index => event => {
-        employees[employeeIndex].projects.splice(index, 1);
-    }
-
-    const handleDelete= event => {
-        employees.splice(employeeIndex,1)
-    };
-
-    const handleFirstChange = event => {
-        employees[employeeIndex].firstName=event.target.value;
-    };
-
-    const handleLastChange = event => {
-        employees[employeeIndex].lastName=event.target.value;
-    };
-
-    const handlePhoneChange = event => {
-        employees[employeeIndex].phoneNumber=event.target.value;
-    };
+      useEffect( () => {
+        if(selectedEmployee)
+        {
+            const employeeIndex =employees.findIndex(findEmployee);
+            setId(employees[employeeIndex].id);
+            setFirstName(employees[employeeIndex].firstName);
+            setLastName(employees[employeeIndex].lastName);
+            setPhoneNumber(employees[employeeIndex].phoneNumber);
+            setTotalHours(employees[employeeIndex].totalHours);
+            setProjects(employees[employeeIndex].projects);
+        }
+    },[])
 
     const handleIdChange = event => {
-        employees[employeeIndex].id=event.target.value;
+		setId(event.target.value)
+	}
+
+	const handleFirstNameChange = event => {
+		setFirstName(event.target.value)
+    }
+
+    const handleLastNameChange = event => {
+		setLastName(event.target.value)
+    }
+    
+    const handleTotalHoursChange = event => {
+		setTotalHours(event.target.value)
+    }
+    
+    const handlePhoneChange = event => {
+		setPhoneNumber(event.target.value)
+	}
+    
+    const handleDelete= event => {
+        const employeeIndex =employees.findIndex(findEmployee);
+        console.log(employeeIndex);
+        employees.splice(employeeIndex,1);
+        localStorage.setItem(`employees`, JSON.stringify(employees));
+        setEmployees(employees);
+        setSelectedOption(0);
     };
 
+	const handleProjectsChange = projects => {
+		setProjects(projects)
+	}
+
+	const handleSave = e => {
+		e.preventDefault()
+
+		const newEmployee = {
+			id,
+            firstName,
+            lastName,
+            phoneNumber,
+			projects,
+			totalHours,
+        }
+
+            var newEmployees=employees;
+            if(newEmployees===null)
+                newEmployees=[newEmployee];
+            else if(selectedEmployee)  
+            {
+                const employeeIndex =employees.findIndex(findEmployee);
+                newEmployees.splice(employeeIndex,1);
+                newEmployees.push(newEmployee);
+            }     
+            else
+                newEmployees.push(newEmployee);
+   
+            localStorage.setItem(`employees`, JSON.stringify(newEmployees));
+            setSelectedEmployee(null);
+            setEmployees(newEmployees);
+            setSelectedOption(0);
+	}
    
 
 
     return(
-        <div>
-        <div style={{width:'25%'}}>
+        <div style={{width:'50%', minWidth:'335px'}}>
             <div style={{height:"44px"}}>
                 <Typography variant="h6"  edge="start" style={{display:"inline"}}>
-                ID:
+                    ID:
                 </Typography>
                 <TextField 
-                        placeholder={employees[employeeIndex].id}
+                        value={id}
+                        onChange={handleIdChange}
                         variant="outlined"
                         style={{marginTop:"0px", float:"right"}}
                         margin='dense'
-                        onChange={handleIdChange}
                         InputProps={{
                             style:{fontSize:"1rem"}
                         }}    
@@ -95,8 +139,8 @@ export default function EmployeeDetails(props){
                 First Name: 
                 </Typography>
                 <TextField 
-                        placeholder={employees[employeeIndex].firstName}
-                        onChange={handleFirstChange}
+                        value={firstName}
+                        onChange={handleFirstNameChange}
                         variant="outlined"
                         style={{marginTop:"0px", float:"right"}}
                         margin='dense'
@@ -111,8 +155,8 @@ export default function EmployeeDetails(props){
                 Last Name: 
                 </Typography>
                 <TextField 
-                        placeholder={employees[employeeIndex].lastName}
-                        onChange={handleLastChange}
+                        value={lastName}
+                        onChange={handleLastNameChange}
                         variant="outlined"
                         style={{marginTop:"0px", float:"right"}}
                         margin='dense'
@@ -127,7 +171,7 @@ export default function EmployeeDetails(props){
                 Phone:  
                 </Typography>
                 <TextField 
-                        placeholder={employees[employeeIndex].phoneNumber}
+                        value={phoneNumber}
                         onChange={handlePhoneChange}
                         variant="outlined"
                         style={{marginTop:"0px", float:"right"}}
@@ -137,41 +181,35 @@ export default function EmployeeDetails(props){
                         }}    
                     />
             </div>
-        </div>
-        
-        <Typography variant="h6"  edge="start" style={{display:"inline"}}>
-                        Projects:
-        </Typography>
 
-        <Table style={{width:'25%'}} aria-label="projects table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>ID</TableCell>
-                        <TableCell align="right">Hours</TableCell>
-                        <TableCell align="right">Delete</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                {employees[employeeIndex].projects.map((project, index) => (
-                    <TableRow key={project.id}>
-                        <TableCell component="th" scope="row">
-                            {project.id}
-                        </TableCell>
-                        <TableCell align="right">{project.hours}</TableCell> 
-                        <TableCell align="right">
-                            <Fab color="secondary" aria-label="delete user" onClick={handleDeleteRow(index)}>
-                                <DeleteIcon />
-                            </Fab>
-                        </TableCell> 
-                    </TableRow>
-                                ))}
-                </TableBody>
-            </Table>
+            <div style={{height:"44px"}}>
+                <Typography variant="h6"  edge="start" style={{display:"inline"}}>
+                Total Hours:  
+                </Typography>
+                <TextField 
+                        value={totalHours}
+                        onChange={handleTotalHoursChange}
+                        variant="outlined"
+                        style={{marginTop:"0px", float:"right"}}
+                        margin='dense'
+                        InputProps={{
+                            style:{fontSize:"1rem"}
+                        }}    
+                    />
+            </div>
+       
+            <EmployeeProjectsTable projects={projects} handleProjectsChange={handleProjectsChange} />
 
-            <Fab color="secondary" aria-label="delete user" variant="extended" onClick={handleDelete}>
+            <Fab color='primary' aria-label='save employee' variant='extended' onClick={handleSave} >
+                <SaveIcon /> 
+                Save employee
+            </Fab>
+            <Fab color="secondary" aria-label="delete employee" variant="extended" onClick={handleDelete} >
                 <DeleteIcon />
-                Delete user
+                Delete employee
             </Fab>
         </div>
     )
 }
+
+export default EmployeeDetails

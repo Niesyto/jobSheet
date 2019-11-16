@@ -17,17 +17,19 @@ import Button from '@material-ui/core/Button';
 
 export default function ProjectEmployeesTable(props)
 {
-    const [employees, setEmployees] = useState([]);
+    const [projects, setProjects] = useState([]);
      //Nie wiem czemu, ale bez tego się nie odświeża, więc dodałem. Jakoś nie ogarnia że przy zmianie stanu tablicy też powinien się rerenderować
     const [refresher, setRefresher] = useState(true);      
     const [selectedId, setSelectedId] = useState(0); 
     const [dialogId, setDialogId] = useState('');
+    const [dialogHours, setDialogHours] = useState('');
     const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = (employeeID) => {
-    setSelectedId(employeeID);
+  const handleClickOpen = (id) => {
+    setSelectedId(id);
     setOpen(true);
     setDialogId('');
+    setDialogHours('');
   };
 
   const handleClose = () => {
@@ -37,46 +39,51 @@ export default function ProjectEmployeesTable(props)
    
 
     useEffect( () => {
-        if(props.employees.length!==0){
-            setEmployees(props.employees);
+        if(props.projects.length!==0){
+            setProjects(props.projects);
             setRefresher(!refresher)
         }
-    },[props.employees])
+    },[props.projects])
 
-    const handleAddEmployee = () => {
-        var tableEmployees=props.employees;
-        tableEmployees.push({'employeeID':"1"})
-        setEmployees(tableEmployees);
+    const handleAddProject = () => {
+        var tableProjects=props.projects;
+        tableProjects.push({'id':" ", 'hours':" "})
+        setProjects(tableProjects);
         setRefresher(!refresher)
-        props.handleEmployeeChange(tableEmployees);
+        props.handleProjectsChange(tableProjects);
     }
 
     const handleDialogIdChange = event => {
 		setDialogId(event.target.value)
+    }
+    
+    const handleDialogHoursChange = event => {
+		setDialogHours(event.target.value)
 	}
 
-    function findEmployee(employee) {
-        return employee.employeeID === selectedId;
+    function findProject(project) {
+        return project.id === selectedId;
     }
 
-    const handleDelete= (employeeID) => {
-        function removeID(employee) {
-            return employeeID !== employee.employeeID;
+    const handleDelete= (id) => {
+        function removeID(project) {
+            return id !== project.id;
           }
-        var tableEmployees = employees.filter(removeID);
-        setEmployees(tableEmployees);
+        var tableProjects = projects.filter(removeID);
+        setProjects(tableProjects);
         setRefresher(!refresher);
-        props.handleEmployeeChange(tableEmployees);
+        props.handleProjectsChange(tableProjects);
 
     };
 
-    function handleIdChange() {
-        const employeeIndex =employees.findIndex(findEmployee);
-        var tableEmployees=props.employees;
-        tableEmployees[employeeIndex].employeeID=dialogId;
-        setEmployees(tableEmployees);
+    function handleProjectChange() {
+        const projectIndex =projects.findIndex(findProject);
+        var tableProjects=props.projects;
+        tableProjects[projectIndex].id=dialogId;
+        tableProjects[projectIndex].hours=dialogHours;
+        setProjects(tableProjects);
         setRefresher(!refresher)
-        props.handleEmployeeChange(tableEmployees);
+        props.handleProjectsChange(tableProjects);
         setOpen(false);
         setSelectedId('');
 	}
@@ -87,26 +94,39 @@ export default function ProjectEmployeesTable(props)
         <TableHead>
             <TableRow>
                 <TableCell>ID</TableCell>
+                <TableCell>Hours</TableCell>
                 <TableCell align="right">Delete</TableCell>
             </TableRow>
         </TableHead>
         <TableBody>
-        {employees.map((employee) => (
-            <TableRow key={employee.employeeID}>
+        {projects.map((project) => (
+            <TableRow key={project.id}>
                 <TableCell >
-                  <TextField
-                    variant='outlined'
-                    value={employee.employeeID}
-                    onClick={handleClickOpen.bind(this,employee.employeeID)}
-                    style={{marginTop:`10%`, float:`right`}}
-                    margin='dense'
-                    InputProps={{
-                      style:{fontSize:`1rem`},
-                    }}
-                  />
+                    <TextField
+                        variant='outlined'
+                        value={project.id}
+                        onClick={handleClickOpen.bind(this,project.id)}
+                        style={{marginTop:`10%`, float:`right`}}
+                        margin='dense'
+                        InputProps={{
+                            style:{fontSize:`1rem`},
+                        }}
+                    />
                 </TableCell>
                 <TableCell align="right">
-                    <Fab color="secondary" aria-label="delete user" onClick={handleDelete.bind(this,employee.employeeID)}>
+                    <TextField
+                        variant='outlined'
+                        value={project.hours}
+                        onClick={handleClickOpen.bind(this,project.id)}
+                        style={{marginTop:`10%`, float:`right`}}
+                        margin='dense'
+                        InputProps={{
+                            style:{fontSize:`1rem`},
+                        }}
+                    />
+                </TableCell>
+                <TableCell align="right">
+                    <Fab color="secondary" aria-label="delete user" onClick={handleDelete.bind(this,project.id)}>
                         <DeleteIcon />
                     </Fab>
                 </TableCell> 
@@ -126,9 +146,19 @@ export default function ProjectEmployeesTable(props)
             onChange={handleDialogIdChange}
             autoFocus
             margin="dense"
-            id="name"
+            id="id"
             label="id"
-            type="email"
+            fullWidth
+          />
+          <DialogContentText>
+            Type in the new hours
+          </DialogContentText>
+          <TextField
+            value={dialogHours}
+            onChange={handleDialogHoursChange}
+            margin="dense"
+            id="hours"
+            label="hours"
             fullWidth
           />
         </DialogContent>
@@ -136,15 +166,15 @@ export default function ProjectEmployeesTable(props)
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleIdChange} color="primary">
+          <Button onClick={handleProjectChange} color="primary">
             Save
           </Button>
         </DialogActions>
       </Dialog>
 
-    <Fab color="primary" aria-label="add employee" variant="extended" onClick={handleAddEmployee}>
+    <Fab color="primary" aria-label="add project" variant="extended" onClick={handleAddProject}>
         <AddIcon />
-        Add employee
+        Add project
     </Fab>
     </div>
     )

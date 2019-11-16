@@ -10,7 +10,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 
 
 const icons = [<PersonIcon/>,<DescriptionIcon/>];
-const menuList = ["Workers", "Projects"];
+const menuList = ["Employees", "Projects"];
 
 const drawerWidth = 240;
 
