@@ -98,7 +98,6 @@ export default function ProjectEmployeesTable(props)
                     variant='outlined'
                     value={employee.employeeID}
                     onClick={handleClickOpen.bind(this,employee.employeeID)}
-                    style={{marginTop:`10%`, float:`right`}}
                     margin='dense'
                     InputProps={{
                       style:{fontSize:`1rem`},

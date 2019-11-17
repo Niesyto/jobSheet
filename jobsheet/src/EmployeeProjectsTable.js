@@ -105,8 +105,7 @@ export default function ProjectEmployeesTable(props)
                     <TextField
                         variant='outlined'
                         value={project.id}
-                        onClick={handleClickOpen.bind(this,project.id)}
-                        style={{marginTop:`10%`, float:`right`}}
+                        onClick={handleClickOpen.bind(this,project.id)}      
                         margin='dense'
                         InputProps={{
                             style:{fontSize:`1rem`},
@@ -117,8 +116,8 @@ export default function ProjectEmployeesTable(props)
                     <TextField
                         variant='outlined'
                         value={project.hours}
+                        stye={{float:"left"}}
                         onClick={handleClickOpen.bind(this,project.id)}
-                        style={{marginTop:`10%`, float:`right`}}
                         margin='dense'
                         InputProps={{
                             style:{fontSize:`1rem`},
