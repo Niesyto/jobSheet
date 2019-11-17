@@ -4,6 +4,7 @@ import EmployeesView from './EmployeesView';
 import EmployeeDetails from './EmployeeDetails';
 import ProjectsView from './ProjectsView';
 import ProjectDetails from './ProjectDetails';
+import Typography from '@material-ui/core/Typography';
 
 const drawerWidth = 240;
 
@@ -62,7 +63,9 @@ export default function SelectedView(props){
     else
     return(
       <main className={classes.content}>       
-         SELECT SOMETHING
+           <Typography variant="h1"  edge="start" style={{marginLeft:'auto',marginRight:'auto'}}>
+                    WELCOME
+           </Typography>
       </main>
   )
 }
