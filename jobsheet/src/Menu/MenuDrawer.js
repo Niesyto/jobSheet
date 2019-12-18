@@ -9,7 +9,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import DescriptionIcon from '@material-ui/icons/Description';
 
 
-const icons = [<PersonIcon/>,<DescriptionIcon/>];
+const icons = [<PersonIcon />, <DescriptionIcon />];
 const menuList = ["Employees", "Projects"];
 
 const drawerWidth = 240;
@@ -24,33 +24,32 @@ const useStyles = makeStyles(theme => ({
   },
   toolbar: theme.mixins.toolbar
 }));
-  
 
-export default function MenuDrawer(props){
-    const classes = useStyles();
 
-    function handleClick(index)
-    {
-      props.setSelectedOption(index);
-    }
+export default function MenuDrawer(props) {
+  const classes = useStyles();
 
-    return(
-        <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper
-        }}
-      >
-        <div className={classes.toolbar} />
-        <List>
-          {menuList.map((text, index) => (
-            <ListItem button key={text} onClick={handleClick.bind(this, index)}>
-                <ListItemIcon >{icons[index]}</ListItemIcon>
-                <ListItemText primary={text} />
+  function handleClick(index) {
+    props.setSelectedOption(index);
+  }
+
+  return (
+    <Drawer
+      className={classes.drawer}
+      variant="permanent"
+      classes={{
+        paper: classes.drawerPaper
+      }}
+    >
+      <div className={classes.toolbar} />
+      <List>
+        {menuList.map((text, index) => (
+          <ListItem button key={text} onClick={handleClick.bind(this, index)}>
+            <ListItemIcon >{icons[index]}</ListItemIcon>
+            <ListItemText primary={text} />
           </ListItem>
-          ))}
-        </List>
-      </Drawer>
-    )
+        ))}
+      </List>
+    </Drawer>
+  )
 }

@@ -7,15 +7,15 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
     appBar: {
-      zIndex: theme.zIndex.drawer + 1,
+        zIndex: theme.zIndex.drawer + 1,
     }
-  }));
-  
+}));
 
-export default function MenuBar(props){
+
+export default function MenuBar(props) {
     const classes = useStyles();
 
-    return(
+    return (
         <AppBar position="fixed" className={classes.appBar}>
             <Toolbar>
                 <Typography variant="h6" noWrap>
